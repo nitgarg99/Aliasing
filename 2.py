@@ -1,6 +1,6 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageTk
 from math import tan, radians
-import sys
+import tkinter as tk
 
 def drawLine(im, x, y):
     draw = ImageDraw.Draw(im)
@@ -71,61 +71,24 @@ def resize (im, scale):
     scaledImage.putdata(newData)
     return scaledImage
 
-#We will filter by averaging the 9 pixels, the one we are looking at + 8 adjacent to it.
-def filter (im):
-    data = list(im.getdata())
-    filteredData = []
-    for row in range (0, 512):
-        for column in range (0, 512):
-            total = 0
-            count = 0
-            #Average adjacent pixels in left column
-            if column-1 >= 0:
-                if row-1 >= 0:
-                    total += data[(column-1) + ((row-1)*512)]
-                    count += 1
-                if row+1 < 512:
-                    total += data[(column-1) + ((row+1)*512)]
-                    count += 1
-                total += data[(column-1) + (row*512)]
-                count += 1
-            #Now middle column
-            if row-1 >= 0:
-                total += data[(column) + ((row-1)*512)]
-                count += 1
-            if row+1 < 512:
-                total += data[(column) + ((row+1)*512)]
-                count +=1
-            total += data[(column) + (row*512)]
-            count +=1
-            #Now right column
-            if column+1 < 512:
-                if row-1 >= 0:
-                    total += data[(column+1) + ((row-1)*512)]
-                    count += 1
-                if row+1 < 512:
-                    total += data[(column+1) + ((row+1)*512)]
-                    count +=1
-                total += data[(column+1) + (row*512)]
-                count += 1
+def update_image(im):
+    return
+
+
+
+
         
-            #Calculate average
-            average = total/count
-            filteredData.append(average)
-    return filteredData
-
-#Get user input        
-n = int(sys.argv[1])
-scale = float(sys.argv[2])
-aliasing = int(sys.argv[3])
-
-#Do Image things
 im = Image.new( 'L', (512, 512), 0xFF)
+print('Type number of lines:', sep=' ')
+n = int(input())
 drawLinePattern(im, n)
-im.show()
-if aliasing:
-    filteredData = filter(im)
-    im.putdata(filteredData)
-
+print('Type scale:', sep=' ')
+scale = float(input())
 im2 = resize(im, scale)
-im2.show()
+#im.show()
+main = tk.Tk()
+tkimg = ImageTk.PhotoImage(im)
+label = tk.Label(main, image=tkimg)
+label.pack()
+main.mainloop()
+#im2.show()
