@@ -7,10 +7,14 @@ def drawLine(im, x, y):
     draw.line ([(im.size[0]/2, im.size[1]/2), (x, y)], 0, 1)
     del draw
 
-def drawLinePattern(im, n):
+def drawLinePattern(im, n, offset=0):
     sep_degrees = 360/n
     for i in range (n):
         degree = i*sep_degrees
+        degree = (degree + offset) 
+        #Translate degree into 0 - 360 domain
+        multiplier = int(degree) // 360
+        degree = degree - multiplier * 360 
         if degree < 45:
             slope = tan(radians(degree))
             y = slope * -im.size[0]/2
@@ -23,8 +27,8 @@ def drawLinePattern(im, n):
             x = (im.size[1]/2)/slope
             x = x + im.size[0]/2
             x = round(x)
-            #DEBUG: print('Drawing line to (', x, im.size[1], ')')
-            drawLine(im, x, im.size[1])
+            #DEBUG: print('Drawing line to (', x, 0, ')')
+            drawLine(im, x, 0)
         elif degree < 225:
             slope = tan(radians(degree))
             y = slope * im.size[0]/2
@@ -37,8 +41,8 @@ def drawLinePattern(im, n):
             x = -(im.size[1]/2)/slope
             x = x + im.size[0]/2
             x = round(x)
-            #DEBUG: print('Drawing line to (', x, 0, ')')
-            drawLine(im, x, 0)
+            #DEBUG: print('Drawing line to (', x, im.size[1], ')')
+            drawLine(im, x, im.size[1])
         elif degree < 360:
             slope = tan(radians(degree))
             y = slope * -im.size[0]/2
@@ -71,8 +75,17 @@ def resize (im, scale):
     scaledImage.putdata(newData)
     return scaledImage
 
-def update_image(im):
-    return
+def update_image():
+    global tkimg 
+    global im
+    global updateIndex
+    global n
+    im = Image.new( 'L', (512, 512), 0xFF)
+    drawLinePattern(im, n, updateIndex*3.6)
+    tkimg = ImageTk.PhotoImage(im)
+    label.config(image = tkimg)
+    label.after(10, update_image)
+    updateIndex += 1
 
 
 
@@ -84,11 +97,12 @@ n = int(input())
 drawLinePattern(im, n)
 print('Type scale:', sep=' ')
 scale = float(input())
-im2 = resize(im, scale)
-#im.show()
+im.show()
 main = tk.Tk()
 tkimg = ImageTk.PhotoImage(im)
 label = tk.Label(main, image=tkimg)
+updateIndex = 1
+print ("Loaded")
 label.pack()
+main.after(1000, update_image)
 main.mainloop()
-#im2.show()
