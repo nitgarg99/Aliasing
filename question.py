@@ -82,11 +82,14 @@ def update_image():
     global updateIndex
     global n
     global s
-    print ("start   time:", int(round(time.time() * 1000)))
+    print ("start time:", int(round(time.time() * 1000)))
     startTime = int(round(time.time() * 1000))
-    tkimg = ImageTk.PhotoImage(im.rotate(updateIndex*6.12*s))
+    multiplier = 360 * s / 40
+    im = Image.new( 'L', (512, 512), 0xFF)
+    drawLinePattern(im, n, updateIndex*multiplier)
+    tkimg = ImageTk.PhotoImage(im)
     label.config(image = tkimg)
-    while (int(round(time.time() * 1000)) < startTime + 16):
+    while (int(round(time.time() * 1000)) < startTime + 24):
         nothing = 0
     label.after(1, update_image)
     updateIndex += 1
