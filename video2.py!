@@ -112,7 +112,7 @@ def capture_image():
     label2.config(image = tkimg2)
     label2.after(1000//int(fps), capture_image)
     print('Captured Index: ', updateIndex2)
-    print(int(round(time.time() * 1000)))
+    print(1000//int(fps),int(round(time.time() * 1000)))
     
 
 im = Image.new( 'L', (512, 512), 0xFF)
@@ -149,7 +149,7 @@ while len(imArr2) < fps:
 
 label.pack()
 label2.pack()
-main.after(5, update_image)
+#main.after(5, update_image)
 print('here now')
 main.after(1, capture_image)
 main.mainloop()

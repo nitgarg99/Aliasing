@@ -147,9 +147,9 @@ while len(imArr2) < fps:
     imArr2.append(im2)
     
 
-label.pack()
+#label.pack()
 label2.pack()
-main.after(5, update_image)
+#main.after(5, update_image)
 print('here now')
 main.after(1, capture_image)
 main.mainloop()
