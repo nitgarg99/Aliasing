@@ -6,7 +6,7 @@
 2. If not working after step 1, try running the following
 `sudo apt-get install python3 pil python3-pil.imagetk`
 
-### Windows Installation
+### Windows Installation:
 
 1. Install Pillow:
 

@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageTk
 from math import tan, radians
 import tkinter as tk
 import time
+import sys
 
 def drawLine(im, x, y):
     draw = ImageDraw.Draw(im)
@@ -88,13 +89,11 @@ def update_image():
         updateIndex = 0
 
     startTime = int(round(time.time() * 1000))
-    print ("start time:", startTime)
     tkimg = ImageTk.PhotoImage(imArr[updateIndex])
     label.config(image = tkimg)
     while (int(round(time.time() * 1000)) < startTime + 15):
         nothing = 0
     label.after(10, update_image)
-    print ("end   time:", int(round(time.time() * 1000)))
 
 
 def capture_image():
@@ -107,22 +106,16 @@ def capture_image():
         updateIndex2 += 1
     else: 
         updateIndex2 = 0
-    print(updateIndex2)
     tkimg2 = ImageTk.PhotoImage(imArr2[updateIndex2])
     label2.config(image = tkimg2)
     label2.after(1000//int(fps), capture_image)
-    print('Captured Index: ', updateIndex2)
-    print(int(round(time.time() * 1000)))
     
 
 im = Image.new( 'L', (512, 512), 0xFF)
-print('Type number of lines:', sep=' ')
-n = int(input())
+n = int(sys.argv[1])
 drawLinePattern(im, n)
-print('Type rotations:', sep=' ')
-s = float(input())
-print('Type output fps:', sep=' ')
-fps = float(input())
+s = float(sys.argv[2])
+fps = float(sys.argv[3])
 main = tk.Tk()
 tkimg = ImageTk.PhotoImage(im)
 tkimg2 = ImageTk.PhotoImage(im)
@@ -136,7 +129,6 @@ while len(imArr) < 40:
     im = Image.new( 'L', (512, 512), 0xFF)
     drawLinePattern(im, n, len(imArr)*multiplier)
     imArr.append(im)
-print (len(imArr))
 
 updateIndex2 = 0
 multiplier2 = 360 * s / fps
@@ -150,6 +142,5 @@ while len(imArr2) < fps:
 label.pack()
 #label2.pack()
 main.after(5, update_image)
-print('here now')
 #main.after(1, capture_image)
 main.mainloop()
